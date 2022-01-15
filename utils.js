@@ -32,13 +32,12 @@ const addNewUsers = (body) => {
 };
 
 const deposit = (id, amount) => {
-  // console.log(amount);
-  // console.log(id);
+  let bool = false;
   const users = getAllUsers();
-  // console.log('eric', users);
   try {
     const userMap = users.map((user) => {
       if (user.id === id) {
+        bool = true;
         console.log('hila', user.id);
         return {
           id: user.id,
@@ -48,6 +47,9 @@ const deposit = (id, amount) => {
       }
       return user;
     });
+    if (!bool) {
+      throw Error('wrong');
+    }
     console.log('ggg', userMap);
     const dataJSON = JSON.stringify(userMap);
     fs.writeFileSync('./database/users.json', dataJSON);
@@ -59,7 +61,7 @@ const deposit = (id, amount) => {
 
 const credit = (id, creditupdate) => {
   const users = getAllUsers();
-  console.log('ggg', creditupdate);
+  // console.log('ggg', creditupdate);
   try {
     if (Number(creditupdate) > 0) {
       const userMap = users.map((user) => {
@@ -84,10 +86,39 @@ const credit = (id, creditupdate) => {
     return error.message;
   }
 };
+7;
+
+const withdraw = (id, money) => {
+  const users = getAllUsers();
+  try {
+    const userMap = users.map((user) => {
+      if (user.id === id) {
+        if (user.cash + user.credit >= money) {
+          console.log('hila', user.id);
+          return {
+            id: user.id,
+            cash: Number(user.cash) - Number(money),
+            credit: user.credit,
+          };
+        } else {
+          throw Error('the credit is low than the cash');
+        }
+      }
+      return user;
+    });
+    // console.log('ggg', userMap);
+    const dataJSON = JSON.stringify(userMap);
+    fs.writeFileSync('./database/users.json', dataJSON);
+    return dataJSON;
+  } catch (error) {
+    return error.message;
+  }
+};
 
 module.exports = {
   getAllUsers,
   addNewUsers,
   deposit,
   credit,
+  withdraw,
 };

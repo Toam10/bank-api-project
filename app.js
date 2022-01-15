@@ -1,7 +1,13 @@
 const express = require('express');
 const app = express();
 
-const { getAllUsers, addNewUsers, deposit, credit } = require('./utils');
+const {
+  getAllUsers,
+  addNewUsers,
+  deposit,
+  credit,
+  withdraw,
+} = require('./utils');
 app.use(express.json());
 
 app.get('/users', (req, res) => {
@@ -30,6 +36,13 @@ app.put('/users/deposit/:id/:amount', (req, res) => {
 app.put('/users/credit/:id/:creditupdate', (req, res) => {
   try {
     res.status(200).send(credit(req.params.id, req.params.creditupdate));
+  } catch (e) {
+    res.status(400).send({ error: e.message });
+  }
+});
+app.put('/users/withdraw/:id/:money', (req, res) => {
+  try {
+    res.status(200).send(withdraw(req.params.id, req.params.money));
   } catch (e) {
     res.status(400).send({ error: e.message });
   }
