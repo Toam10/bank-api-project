@@ -14,15 +14,17 @@ const getAllUsers = () => {
 const getOneUser = (id) => {
   try {
     const users = getAllUsers();
-    console.log('hilascs');
+    console.log(users);
+    console.log('hila');
     const wantedId = users.find((user) => {
-      if (user.id === Number(id)) {
-        console.log('hhh', wantedId);
-        return wantedId;
-      } else {
-        throw Error('cant find id');
-      }
+      return user.id == id;
     });
+    if (wantedId === undefined) {
+      //after the find we wantedto check the error
+      throw Error('wrong');
+    } else {
+      return wantedId;
+    }
   } catch (error) {
     return error.message;
   }
