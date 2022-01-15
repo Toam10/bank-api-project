@@ -84,7 +84,7 @@ const credit = (id, creditupdate) => {
     if (Number(creditupdate) > 0) {
       const userMap = users.map((user) => {
         if (user.id === id) {
-          console.log('check', creditupdate);
+          // console.log('check', creditupdate);
           return {
             id: user.id,
             cash: user.cash,
@@ -132,6 +132,44 @@ const withdraw = (id, money) => {
   }
 };
 
+const transfer = (id, reciver, money) => {
+  const users = getAllUsers();
+  // console.log(users);
+  try {
+    const findUser = users.map((user) => {
+      if (user.id === id) {
+        console.log(user.id);
+        if (user.cash + user.credit >= money) {
+          const findreciver = users.find((user) => {
+            console.log(findreciver);
+            user.id === reciver;
+          });
+          return (
+            // {
+            //   id: findreciver.id,
+            //   cash: Number(findreciver.cash) + Number(money),
+            //   credit: findreciver.credit,
+            // },
+            {
+              id: user.id,
+              cash: Number(user.cash) - Number(money),
+              credit: user.credit,
+            }
+          );
+        }
+        return user;
+      } else {
+        throw Error('rotem');
+      }
+    });
+    const dataJSON = JSON.stringify(findUser);
+    fs.writeFileSync('./database/users.json', dataJSON);
+    return dataJSON;
+  } catch (error) {
+    return error.message;
+  }
+};
+
 module.exports = {
   getAllUsers,
   addNewUsers,
@@ -139,4 +177,5 @@ module.exports = {
   credit,
   withdraw,
   getOneUser,
+  transfer,
 };

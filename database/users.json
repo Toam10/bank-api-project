@@ -1,4 +1,1 @@
-[{"id":"1","cash":400,"credit":200},
-    {"id":"2","cash":-500,"credit":500}
-    ,{"id":"3","cash":100,"credit":100}
-    ,{}]
+[{"id":1,"cash":100,"credit":200},{"id":2,"cash":100,"credit":200},{"id":3,"cash":100,"credit":100}]

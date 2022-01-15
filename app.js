@@ -8,6 +8,7 @@ const {
   credit,
   withdraw,
   getOneUser,
+  transfer,
 } = require('./utils');
 app.use(express.json());
 
@@ -52,6 +53,16 @@ app.put('/users/credit/:id/:creditupdate', (req, res) => {
 app.put('/users/withdraw/:id/:money', (req, res) => {
   try {
     res.status(200).send(withdraw(req.params.id, req.params.money));
+  } catch (e) {
+    res.status(400).send({ error: e.message });
+  }
+});
+
+app.put('/users/transfer/:id/:reciver/:money', (req, res) => {
+  try {
+    res
+      .status(200)
+      .send(transfer(req.params.id, req.params.reciver, req.params.money));
   } catch (e) {
     res.status(400).send({ error: e.message });
   }
