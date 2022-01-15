@@ -7,12 +7,21 @@ const {
   deposit,
   credit,
   withdraw,
+  getOneUser,
 } = require('./utils');
 app.use(express.json());
 
-app.get('/users', (req, res) => {
+app.get('/users/', (req, res) => {
   try {
     res.status(200).send(getAllUsers());
+  } catch (e) {
+    res.status(400).send({ error: e.message });
+  }
+});
+
+app.get('/users/:id', (req, res) => {
+  try {
+    res.status(200).send(getOneUser(req.params.id));
   } catch (e) {
     res.status(400).send({ error: e.message });
   }

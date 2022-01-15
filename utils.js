@@ -1,4 +1,4 @@
-const { log } = require('console');
+const { log, countReset } = require('console');
 const fs = require('fs');
 
 const getAllUsers = () => {
@@ -10,11 +10,27 @@ const getAllUsers = () => {
     return [];
   }
 };
+
+const getOneUser = (id) => {
+  try {
+    const users = getAllUsers();
+    console.log('hilascs');
+    const wantedId = users.find((user) => {
+      if (user.id === Number(id)) {
+        console.log('hhh', wantedId);
+        return wantedId;
+      } else {
+        throw Error('cant find id');
+      }
+    });
+  } catch (error) {
+    return error.message;
+  }
+};
+
 const addNewUsers = (body) => {
   try {
-    // console.log(body);
     const users = getAllUsers();
-    // res.send(users);
     users.find((user) => {
       if (user.id === body.id) {
         //check if id is exist in our data.
@@ -86,7 +102,6 @@ const credit = (id, creditupdate) => {
     return error.message;
   }
 };
-7;
 
 const withdraw = (id, money) => {
   const users = getAllUsers();
@@ -94,7 +109,7 @@ const withdraw = (id, money) => {
     const userMap = users.map((user) => {
       if (user.id === id) {
         if (user.cash + user.credit >= money) {
-          console.log('hila', user.id);
+          // console.log('hila', user.id);
           return {
             id: user.id,
             cash: Number(user.cash) - Number(money),
@@ -121,4 +136,5 @@ module.exports = {
   deposit,
   credit,
   withdraw,
+  getOneUser,
 };
