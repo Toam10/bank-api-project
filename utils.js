@@ -134,22 +134,24 @@ const withdraw = (id, money) => {
 
 const transfer = (id, reciver, money) => {
   const users = getAllUsers();
-  // console.log(users);
+  console.log(users);
   try {
+    const findreciver = users.find((user) => {
+      user.id === parseInt(reciver);
+      console.log('aa', user.id);
+      console.log('bb', parseInt(reciver));
+    });
+    console.log('hila', JSON.stringify(findreciver));
     const findUser = users.map((user) => {
-      if (user.id === id) {
+      if (user.id === parseInt(id)) {
         console.log(user.id);
         if (user.cash + user.credit >= money) {
-          const findreciver = users.find((user) => {
-            console.log(findreciver);
-            user.id === reciver;
-          });
           return (
-            // {
-            //   id: findreciver.id,
-            //   cash: Number(findreciver.cash) + Number(money),
-            //   credit: findreciver.credit,
-            // },
+            {
+              id: findreciver.id,
+              cash: Number(findreciver.cash) + Number(money),
+              credit: findreciver.credit,
+            },
             {
               id: user.id,
               cash: Number(user.cash) - Number(money),
@@ -159,7 +161,7 @@ const transfer = (id, reciver, money) => {
         }
         return user;
       } else {
-        throw Error('rotem');
+        throw Error('wrong');
       }
     });
     const dataJSON = JSON.stringify(findUser);
