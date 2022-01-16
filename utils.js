@@ -1,4 +1,3 @@
-const { log, countReset } = require('console');
 const fs = require('fs');
 
 const getAllUsers = () => {
@@ -14,8 +13,6 @@ const getAllUsers = () => {
 const getOneUser = (id) => {
   try {
     const users = getAllUsers();
-    console.log(users);
-    console.log('hila');
     const wantedId = users.find((user) => {
       return user.id == id;
     });
@@ -79,12 +76,10 @@ const deposit = (id, amount) => {
 
 const credit = (id, creditupdate) => {
   const users = getAllUsers();
-  // console.log('ggg', creditupdate);
   try {
     if (Number(creditupdate) > 0) {
       const userMap = users.map((user) => {
         if (user.id === id) {
-          // console.log('check', creditupdate);
           return {
             id: user.id,
             cash: user.cash,
@@ -93,7 +88,7 @@ const credit = (id, creditupdate) => {
         }
         return user;
       });
-      // console.log('ggg', userMap);
+
       const dataJSON = JSON.stringify(userMap);
       fs.writeFileSync('./database/users.json', dataJSON);
       return dataJSON;
@@ -133,44 +128,60 @@ const withdraw = (id, money) => {
 };
 
 const transfer = (id, reciver, money) => {
-  const users = getAllUsers();
-  console.log(users);
   try {
-    const findreciver = users.find((user) => {
-      user.id === parseInt(reciver);
-      console.log('aa', user.id);
-      console.log('bb', parseInt(reciver));
-    });
-    console.log('hila', JSON.stringify(findreciver));
-    const findUser = users.map((user) => {
-      if (user.id === parseInt(id)) {
-        console.log(user.id);
-        if (user.cash + user.credit >= money) {
-          return (
-            {
-              id: findreciver.id,
-              cash: Number(findreciver.cash) + Number(money),
-              credit: findreciver.credit,
-            },
-            {
-              id: user.id,
-              cash: Number(user.cash) - Number(money),
-              credit: user.credit,
-            }
-          );
-        }
+    const users = getAllUsers();
+    const newUsers = users.map((user) => {
+      if (user.id === +reciver) {
+        user.id = +reciver;
+        user.cash = +user.cash + +money;
         return user;
-      } else {
-        throw Error('wrong');
       }
+
+      if (user.id === id) {
+        user.id = +id;
+        user.cash = +user.cash - +money;
+        return user;
+      }
+
+      return user;
     });
-    const dataJSON = JSON.stringify(findUser);
-    fs.writeFileSync('./database/users.json', dataJSON);
-    return dataJSON;
+
+    return newUsers;
   } catch (error) {
-    return error.message;
+    console.log(error);
   }
 };
+
+//     console.log('findreciver', findreciver);
+//     const findUser = users.map((user) => {
+//       if (user.id === parseInt(id)) {
+//         console.log(user.id);
+//         if (user.cash + user.credit >= money) {
+//           return (
+//             {
+//               id: findreciver.id,
+//               cash: Number(findreciver.cash) + Number(money),
+//               credit: findreciver.credit,
+//             },
+//             {
+//               id: user.id,
+//               cash: Number(user.cash) - Number(money),
+//               credit: user.credit,
+//             }
+//           );
+//         }
+//         return user;
+//       } else {
+//         throw Error('wrong');
+//       }
+//     });
+//     const dataJSON = JSON.stringify(findUser);
+//     fs.writeFileSync('./database/users.json', dataJSON);
+//     return dataJSON;
+//   } catch (error) {
+//     return error.message;
+//   }
+// };
 
 module.exports = {
   getAllUsers,

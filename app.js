@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const cors = require('cors');
 
 const {
   getAllUsers,
@@ -11,6 +12,7 @@ const {
   transfer,
 } = require('./utils');
 app.use(express.json());
+app.use(cors());
 
 app.get('/users/', (req, res) => {
   try {
