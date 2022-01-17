@@ -75,3 +75,7 @@ const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`listening on port ${PORT}`);
 });
+
+// move to routes all the app.method 
+// functions to controllers
+// paths is to long use router / app .use(path, route);
